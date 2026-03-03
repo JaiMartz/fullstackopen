@@ -69,27 +69,6 @@ const [right, setRight] = useState(0)
 const [allClicks, setAll] = useState([])
 const [total, setTotal] = useState(0)
 
-const History = (props) => {
-  if(props.allClicks.length === 0) {
-    return (
-      <div>
-        The app is used by pressing the buttons
-      </div>
-    )
-  }
-  return (
-    <div>
-      Button press history: {props.allClicks.join(' ')}
-    </div>
-  )
-}
-
-const Button = ({handleClick, text}) => {
-  return (
-    <button onClick={handleClick}>{text}</button>
-  )
-}
-
 //Manejo de arrays
 //tener en cuenta que el estado no se actualiza inmediatamente, 
 // por lo que si queremos actualizar el total, debemos hacerlo despues de actualizar left o right, y no antes
@@ -117,5 +96,27 @@ const handleRightClick = () => {
     </div>
   )
 }
+
+const History = (props) => {
+  if(props.allClicks.length === 0) {
+    return (
+      <div>
+        The app is used by pressing the buttons
+      </div>
+    )
+  }
+  return (
+    <div>
+      Button press history: {props.allClicks.join(' ')}
+    </div>
+  )
+}
+
+const Button = ({ handleClick, text }) => {
+  return (
+    <button onClick={handleClick}>{text}</button>
+  )
+}
+
 
 export default App

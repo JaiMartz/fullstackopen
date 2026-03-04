@@ -11,22 +11,41 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
 
-
-  const handleClick = () => {
-    let randomNumber = random()
+  const handleRandomAnecdote = () => {
+    let randomNumber = random();
     while (randomNumber === selected) {
-      randomNumber = random()
+      randomNumber = random();
     }
     setSelected(randomNumber)
   }
 
+  const handleVote = () => {
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
+
+  }
+
+  const handleMostVotedAnecdote = () => {
+    return votes.indexOf(Math.max(...votes));
+  };
+
+
+  const getMostVotedAnecdote = () => {
+    return Math.max(...votes);
+  }
   return (
   
     <div>
-      <p>{anecdotes[selected]}</p>
-      <Button handleClick={handleClick} text="next anecdote" />
+      <Display anecdote={anecdotes[selected]} votes={votes[selected]} />
+      <Button handleClick={handleVote} text='vote' />
+      <Button handleClick={handleRandomAnecdote} text='next anecdote' />
+      <h2>Anecdote with most votes</h2>
+      <Display anecdote={anecdotes[handleMostVotedAnecdote()]} votes={getMostVotedAnecdote()} />
+
     </div>
     
 
@@ -37,9 +56,18 @@ const random = () => {
   return Math.floor(Math.random() * 8)
 }
 
+//components
 const Button = ({handleClick, text}) => {
   return (
     <button onClick={handleClick}>{text}</button>
+  )
+}
+const Display = ({anecdote, votes}) => {
+  return (
+    <div>
+      <p>{anecdote}</p>
+      <p>has {votes} votes</p>
+    </div>
   )
 }
 

@@ -48,6 +48,7 @@ const courses = [
 
   return (
     <div>
+      <h1>Web development curriculum</h1>
       {courses.map(course => {
         return <Course key={course.id} name={course.name} parts={course.parts} />
       })}
@@ -66,7 +67,7 @@ const Course = ({ name, parts }) => {
 
 const Header = ({name}) => {
   return (
-    <h1>{name}</h1>
+    <h2>{name}</h2>
   )
 }
 

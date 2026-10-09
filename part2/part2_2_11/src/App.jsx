@@ -15,14 +15,18 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
+
+  
   useEffect(() => {
-    console.log('effect');
+    console.log('effect')
     axios.get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('promise fulfilled');
-      setPersons(response.data)
-    })
+         .then(response => {
+          console.log('promise fulfilled')
+          setPersons(response.data)
+         })
+
   }, [])
+
 
   const handleNewName = (event) => {
     console.log(event.target.value);

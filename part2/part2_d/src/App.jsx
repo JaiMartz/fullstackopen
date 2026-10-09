@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Note from './components/Note'
+import noteService from './services/notes'
 
 
 const App = () => {
@@ -20,6 +21,9 @@ const App = () => {
         setNotes(response.data)
       })
   }, [])
+
+  //TODO: Seguimos por el punto 'Extraer la comunicación con el backend en un módulo separado' 
+  // importante noteService
 
   console.log('render', notes.length, 'notes');
 
@@ -50,13 +54,14 @@ const App = () => {
 
   const toggleImportanceOf= (id) => {
     //console.log(`importance of ${id} needs to be toggled`)
-    const url = `http://localhost:3001/notes/${id}`
+    const url = `http://localhost:3001/notes/${id}` //comillas invertidas para poder interpolar la variable id en la url
     const note = notes.find( n => n.id === id)
     const changedNote = {...note, important: !note.important}
 
     axios.put(url, changedNote).then(response => {
       setNotes(notes.map(note => note.id !== id ? note : response.data))
     })
+  
   }
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important === true)

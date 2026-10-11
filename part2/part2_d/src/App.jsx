@@ -14,11 +14,10 @@ const App = () => {
   // when the component is first rendered.
   useEffect(() => {
     console.log('effect');
-    axios
-      .get('http://localhost:3001/notes')
-      .then(response => {
-        console.log('promise fulfilled');
-        setNotes(response.data)
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
       })
   }, [])
 
@@ -36,12 +35,13 @@ const App = () => {
       important: Math.random() < 0.5
     }
 
-    axios.post('http://localhost:3001/notes', noteObject)
-      .then(response => {
-        console.log(response);
-        setNotes(notes.concat(response.data))
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
         setNewNote('')
-      })
+    })
+
 
     setNotes(notes.concat(noteObject))
     setNewNote('')
@@ -54,12 +54,15 @@ const App = () => {
 
   const toggleImportanceOf= (id) => {
     //console.log(`importance of ${id} needs to be toggled`)
-    const url = `http://localhost:3001/notes/${id}` //comillas invertidas para poder interpolar la variable id en la url
+    //const url = `http://localhost:3001/notes/${id}` //comillas invertidas para poder interpolar la variable id en la url
     const note = notes.find( n => n.id === id)
     const changedNote = {...note, important: !note.important}
 
-    axios.put(url, changedNote).then(response => {
-      setNotes(notes.map(note => note.id !== id ? note : response.data))
+    noteService.update(id, changedNote).then(returnedNote => {
+      setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+    }).catch(error => {
+      alert(`the note '${note.content}' was already deleted from server`)
+      setNotes(notes.filter(note => note.id !== id))
     })
   
   }

@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import './index.css'
 import Note from './components/Note'
+import Notification from './components/Notification'
 import noteService from './services/notes'
+import Footer from './components/Footer'
+
 
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   // is called when the component is mounted, 
   // and the empty array as the second argument ensures that the effect is only run once, 
@@ -61,9 +65,17 @@ const App = () => {
     noteService.update(id, changedNote).then(returnedNote => {
       setNotes(notes.map(note => note.id !== id ? note : returnedNote))
     }).catch(error => {
+        setErrorMessage(
+          `Note '${note.content}' was already removed from server`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+    /*.catch(error => {
       alert(`the note '${note.content}' was already deleted from server`)
       setNotes(notes.filter(note => note.id !== id))
-    })
+    })*/
   
   }
 
@@ -72,6 +84,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -92,6 +105,8 @@ const App = () => {
         />
         <button type="submit">save</button>
       </form>
+
+      <Footer />
     </div>
   )
 }
